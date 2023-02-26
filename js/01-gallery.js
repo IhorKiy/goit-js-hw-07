@@ -1,8 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
 
 const refElemGalery = document.querySelector('.gallery');
-refElemGalery.addEventListener('click', onContainerGalleryClick )
 const addCreateList = createList(galleryItems);
 refElemGalery.insertAdjacentHTML('beforeend', addCreateList);
 
@@ -21,25 +19,30 @@ function createList(galleryItems) {
 </div>`;
     })
     .join('');
-  };
-
-function onContainerGalleryClick(evt) {
-  evt.preventDefault();
-  if (!evt.target.classList.contains('gallery__image')) {
-    return;
-  }
-  const instance = basicLightbox.create(`
-    <img src="${evt.target.dataset.source}">
-`)
-  instance.show()
-//////Close modal////////////////
-  refElemGalery.addEventListener('keydown', (evt) => {
-  if (evt.code === "Escape") {
-    instance.close();
-  }
-});
 }
 
+function createModal(evt) {
+  const instance = basicLightbox.create(`
+    <img src="${evt.target.dataset.source}">
+  `);
+  instance.show();
+
+  const closeModal = (evt) => {
+    if (evt.code === "Escape") {
+      instance.close();
+      refElemGalery.removeEventListener('keydown', closeModal);
+    }
+  };
+
+  refElemGalery.addEventListener('keydown', closeModal);
+}
+
+refElemGalery.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  if (evt.target.classList.contains('gallery__image')) {
+    createModal(evt);
+  }
+});
 
 
 
