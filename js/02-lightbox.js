@@ -3,7 +3,6 @@ import { galleryItems } from "./gallery-items.js";
 const refElemGalery = document.querySelector(".gallery");
 const addCreateList = createList(galleryItems);
 refElemGalery.insertAdjacentHTML("beforeend", addCreateList);
-refElemGalery.addEventListener("click", onContainerGalleryClick);
 
 function createList(galleryItems) {
   return galleryItems
@@ -16,21 +15,9 @@ function createList(galleryItems) {
     .join("");
 }
 
-function onContainerGalleryClick(evt) {
-  evt.preventDefault();
-  if (!evt.target.classList.contains("gallery__image")) {
-    return;
-  }
-  const instance = new SimpleLightbox(".gallery a", {
+const instance = new SimpleLightbox(".gallery a", {
     captionsData: "alt",
     captionDelay: 250,
-  });
+})
+  instance.show()
 
-  instance.show();
-  //////Close modal////////////////
-  refElemGalery.addEventListener("keydown", (evt) => {
-    if (evt.code === "Escape") {
-      instance.close();
-    }
-  });
-}
